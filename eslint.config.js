@@ -5,12 +5,11 @@ const reactPlugin = require('eslint-plugin-react');
 const reactHooksPlugin = require('eslint-plugin-react-hooks');
 const importPlugin = require('eslint-plugin-import');
 const prettierPlugin = require('eslint-plugin-prettier');
-const a11yPlugin = require('eslint-plugin-react-native-a11y');
 
 module.exports = tseslint.config(
   // ── Global ignores ────────────────────────────────────────────────────────
   {
-    ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'eslint.config.js', 'babel.config.cjs', 'jest.config.js'],
+    ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'eslint.config.js', 'babel.config.cjs'],
   },
 
   // ── Base JS rules ─────────────────────────────────────────────────────────
@@ -27,7 +26,6 @@ module.exports = tseslint.config(
       'react-hooks': reactHooksPlugin,
       import: importPlugin,
       prettier: prettierPlugin,
-      'react-native-a11y': a11yPlugin,
     },
     languageOptions: {
       parserOptions: {
@@ -97,11 +95,6 @@ module.exports = tseslint.config(
       eqeqeq: ['error', 'always', { null: 'ignore' }],
       'prefer-const': 'error',
       'no-var': 'error',
-
-      // ── Accessibility (react-native-a11y) ─────────────────────────────────
-      'react-native-a11y/has-accessibility-props': 'error',
-      'react-native-a11y/has-valid-accessibility-role': 'error',
-      'react-native-a11y/no-nested-touchables': 'error',
     },
   },
 

@@ -58,7 +58,6 @@ const LoginScreen: React.FC<Props> = ({ onSuccess, onRegister, onForgotPassword 
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      testID="login-screen"
     >
       <View style={styles.inner}>
         <Text style={styles.logo}>🐾</Text>
@@ -75,7 +74,6 @@ const LoginScreen: React.FC<Props> = ({ onSuccess, onRegister, onForgotPassword 
           onChangeText={setEmail}
           returnKeyType="next"
           onSubmitEditing={() => passwordRef.current?.focus()}
-          testID="login-email-input"
         />
 
         <TextInput
@@ -88,7 +86,6 @@ const LoginScreen: React.FC<Props> = ({ onSuccess, onRegister, onForgotPassword 
           ref={passwordRef}
           returnKeyType="go"
           onSubmitEditing={() => void handleLogin()}
-          testID="login-password-input"
         />
 
         <TouchableOpacity onPress={onForgotPassword} style={styles.forgotLink}>
@@ -99,7 +96,6 @@ const LoginScreen: React.FC<Props> = ({ onSuccess, onRegister, onForgotPassword 
           style={[styles.btn, loading && styles.btnDisabled]}
           onPress={() => void handleLogin()}
           disabled={loading}
-          testID="login-submit-button"
         >
           {loading ? (
             <ActivityIndicator color="#fff" />

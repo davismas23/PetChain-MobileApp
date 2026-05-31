@@ -95,8 +95,8 @@ describe('notificationService', () => {
 
     it('should cancel existing reminders before scheduling new ones', async () => {
       (getItem as jest.Mock)
-        .mockResolvedValueOnce(null) // for getPreferences
-        .mockResolvedValueOnce(JSON.stringify({ 'med-123': ['old-id'] })); // for getNotificationMap
+        .mockResolvedValueOnce(JSON.stringify({ 'med-123': ['old-id'] })) // for getNotificationMap
+        .mockResolvedValueOnce(null); // for getPreferences
       (Notifications.scheduleNotificationAsync as jest.Mock).mockResolvedValue('new-id');
 
       await scheduleMedicationReminder(mockMedication);

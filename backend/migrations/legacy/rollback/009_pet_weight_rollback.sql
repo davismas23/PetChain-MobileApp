@@ -1,1 +1,0 @@
-ALTER TABLE pets DROP COLUMN IF EXISTS weight_kg;

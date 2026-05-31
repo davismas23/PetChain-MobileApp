@@ -7,11 +7,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Share,
-  Platform,
 } from 'react-native';
 
-import WeightChart, { type WeightDataPoint } from '../components/WeightChart';
 import type { Appointment } from '../models/Appointment';
 import { AppointmentStatus } from '../models/Appointment';
 import type { HealthMetricEntry } from '../models/HealthMetric';
@@ -38,7 +35,6 @@ interface DashboardData {
   upcomingAppointments: Appointment[];
   latestMetric: HealthMetricEntry | null;
   healthScore: number | null;
-  weightHistory: WeightDataPoint[];
 }
 
 // ─── Health Score Calculation ──────────────────────────────────────────────
@@ -138,7 +134,6 @@ const PetHealthDashboardScreen: React.FC<Props> = ({ petId, petName, onBack, onO
     upcomingAppointments: [],
     latestMetric: null,
     healthScore: null,
-    weightHistory: [],
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -171,15 +166,6 @@ const PetHealthDashboardScreen: React.FC<Props> = ({ petId, petName, onBack, onO
 
       const healthScore = computeHealthScore(latestMetric, activeMeds.length);
 
-      // Build weight history from metrics
-      const weightHistory: WeightDataPoint[] = sortedMetrics
-        .filter((m) => m.weightKg !== undefined)
-        .map((m) => ({
-          date: m.recordedAt,
-          weightKg: m.weightKg!,
-          note: m.notes,
-        }));
-
       setData({
         recentRecords: sortedRecords.slice(0, 3),
         activeMedications: activeMeds.slice(0, 5),
@@ -191,7 +177,6 @@ const PetHealthDashboardScreen: React.FC<Props> = ({ petId, petName, onBack, onO
           .slice(0, 3),
         latestMetric,
         healthScore,
-        weightHistory,
       });
     } finally {
       setLoading(false);
@@ -208,17 +193,6 @@ const PetHealthDashboardScreen: React.FC<Props> = ({ petId, petName, onBack, onO
     void load();
   };
 
-  const handleExportChart = useCallback(async () => {
-    try {
-      await Share.share({
-        message: `${petName}'s weight chart - exported from PetChain`,
-        title: `${petName} Weight Chart`,
-      });
-    } catch (err) {
-      console.error('Failed to share chart:', err);
-    }
-  }, [petName]);
-
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -228,7 +202,7 @@ const PetHealthDashboardScreen: React.FC<Props> = ({ petId, petName, onBack, onO
     );
   }
 
-  const { recentRecords, activeMedications, upcomingAppointments, latestMetric, healthScore, weightHistory } =
+  const { recentRecords, activeMedications, upcomingAppointments, latestMetric, healthScore } =
     data;
 
   return (
@@ -328,19 +302,6 @@ const PetHealthDashboardScreen: React.FC<Props> = ({ petId, petName, onBack, onO
                 )}
               </View>
             </Card>
-          </>
-        )}
-
-        {/* ── Weight & Growth Chart ──────────────────────────────── */}
-        {data.weightHistory.length > 0 && (
-          <>
-            <SectionHeader title="Weight & Growth" icon="📈" />
-            <WeightChart
-              data={data.weightHistory}
-              vetRecommendedRange={{ min: 4.5, max: 5.5 }}
-              onExport={handleExportChart}
-              height={300}
-            />
           </>
         )}
 

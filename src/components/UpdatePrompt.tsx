@@ -10,8 +10,6 @@ import {
   Platform,
 } from 'react-native';
 
-import { useAppTheme } from '../theme';
-
 interface Props {
   /** 'optional' shows a dismiss button; 'force' hides it */
   variant: 'optional' | 'force';
@@ -25,7 +23,6 @@ interface Props {
 }
 
 export default function UpdatePrompt({ variant, onUpdate, storeUrl, onDismiss, visible }: Props) {
-  const colors = useAppTheme();
   const isForce = variant === 'force';
 
   // Prevent Android back-button from dismissing a force-update modal
@@ -51,24 +48,17 @@ export default function UpdatePrompt({ variant, onUpdate, storeUrl, onDismiss, v
       statusBarTranslucent
       onRequestClose={isForce ? undefined : onDismiss}
     >
-      <View style={[styles.overlay, { backgroundColor: colors.overlay }]}>
-        <View
-          style={[
-            styles.card,
-            { backgroundColor: colors.surface, shadowColor: colors.shadow },
-          ]}
-        >
-          <Text style={[styles.title, { color: colors.text }]}>
-            {isForce ? 'Update Required' : 'Update Available'}
-          </Text>
-          <Text style={[styles.body, { color: colors.secondaryText }]}>
+      <View style={styles.overlay}>
+        <View style={styles.card}>
+          <Text style={styles.title}>{isForce ? 'Update Required' : 'Update Available'}</Text>
+          <Text style={styles.body}>
             {isForce
               ? 'A critical update is required to continue using PetChain. Please update the app from the store.'
               : 'A new version of PetChain is ready. Update now for the latest features and fixes.'}
           </Text>
 
           <TouchableOpacity
-            style={[styles.primaryBtn, { backgroundColor: colors.info }]}
+            style={styles.primaryBtn}
             onPress={handlePrimary}
             accessibilityRole="button"
             accessibilityLabel="Update now"
@@ -83,7 +73,7 @@ export default function UpdatePrompt({ variant, onUpdate, storeUrl, onDismiss, v
               accessibilityRole="button"
               accessibilityLabel="Remind me later"
             >
-              <Text style={[styles.secondaryText, { color: colors.info }]}>Later</Text>
+              <Text style={styles.secondaryText}>Later</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -95,11 +85,13 @@ export default function UpdatePrompt({ variant, onUpdate, storeUrl, onDismiss, v
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.55)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
   },
   card: {
+    backgroundColor: '#fff',
     borderRadius: 16,
     padding: 24,
     width: '100%',
@@ -107,6 +99,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
+        shadowColor: '#000',
         shadowOpacity: 0.15,
         shadowRadius: 12,
         shadowOffset: { width: 0, height: 4 },
@@ -117,11 +110,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
+    color: '#1a1a1a',
     marginBottom: 10,
     textAlign: 'center',
   },
-  body: { fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 24 },
+  body: { fontSize: 14, color: '#555', textAlign: 'center', lineHeight: 20, marginBottom: 24 },
   primaryBtn: {
+    backgroundColor: '#4A90A4',
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 32,
@@ -131,5 +126,5 @@ const styles = StyleSheet.create({
   },
   primaryText: { color: '#fff', fontWeight: '700', fontSize: 15 },
   secondaryBtn: { paddingVertical: 8 },
-  secondaryText: { fontSize: 14 },
+  secondaryText: { color: '#4A90A4', fontSize: 14 },
 });

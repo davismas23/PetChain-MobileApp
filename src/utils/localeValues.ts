@@ -4,7 +4,6 @@ import i18n from '../i18n';
 const LOCALE_MAP: Record<string, string> = {
   en: 'en-US',
   es: 'es-ES',
-  ar: 'ar-SA',
 };
 
 /** Locales that use imperial units (lb / °F) */
@@ -77,7 +76,6 @@ export function temperatureUnit(): string {
 const CURRENCY_MAP: Record<string, string> = {
   'en-US': 'USD',
   'es-ES': 'EUR',
-  'ar-SA': 'SAR',
 };
 
 /**

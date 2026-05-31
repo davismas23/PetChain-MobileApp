@@ -7,7 +7,6 @@ export interface DBPet {
   species: string;
   breed?: string;
   date_of_birth?: Date;
-  weight_kg?: number;
   microchip_id?: string;
   photo_url?: string;
   thumbnail_url?: string;
@@ -26,28 +25,16 @@ export class PetRepository extends BaseRepository<DBPet> {
       species,
       breed,
       date_of_birth,
-      weight_kg,
       microchip_id,
       photo_url,
       thumbnail_url,
       owner_id,
     } = pet;
     const res = await query(
-      `INSERT INTO pets (id, name, species, breed, date_of_birth, weight_kg, microchip_id, photo_url, thumbnail_url, owner_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      `INSERT INTO pets (id, name, species, breed, date_of_birth, microchip_id, photo_url, thumbnail_url, owner_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        RETURNING *`,
-      [
-        id,
-        name,
-        species,
-        breed,
-        date_of_birth,
-        weight_kg,
-        microchip_id,
-        photo_url,
-        thumbnail_url,
-        owner_id,
-      ],
+      [id, name, species, breed, date_of_birth, microchip_id, photo_url, thumbnail_url, owner_id],
     );
     return res.rows[0];
   }

@@ -124,7 +124,6 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete, onSkip 
           <TouchableOpacity
             style={[styles.nextButton, isLastSlide && styles.getStartedButton]}
             onPress={handleNext}
-            testID={isLastSlide ? 'onboarding-get-started-button' : 'onboarding-next-button'}
           >
             <Text style={[styles.nextButtonText, isLastSlide && styles.getStartedButtonText]}>
               {isLastSlide ? 'Get Started' : 'Next'}
@@ -151,7 +150,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete, onSkip 
 
   return (
     <ErrorBoundary>
-      <SafeAreaView style={styles.container} testID="onboarding-screen">
+      <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
 
         <View style={styles.header}>

@@ -12,24 +12,10 @@ export function sanitizeInputs(req: Request, res: Response, next: NextFunction):
       req.body = sanitizeObject(req.body) as Record<string, unknown>;
     }
     if (req.query && typeof req.query === 'object') {
-      const sanitized = sanitizeObject(req.query) as typeof req.query;
-      // Some express adapters expose `req.query` as a getter-only value in tests.
-      // Prefer in-place mutation; fall back to assignment when allowed.
-      try {
-        Object.keys(req.query).forEach((k) => delete (req.query as any)[k]);
-        Object.assign(req.query as any, sanitized);
-      } catch {
-        req.query = sanitized;
-      }
+      req.query = sanitizeObject(req.query) as typeof req.query;
     }
     if (req.params && typeof req.params === 'object') {
-      const sanitized = sanitizeObject(req.params) as typeof req.params;
-      try {
-        Object.keys(req.params).forEach((k) => delete (req.params as any)[k]);
-        Object.assign(req.params as any, sanitized);
-      } catch {
-        req.params = sanitized;
-      }
+      req.params = sanitizeObject(req.params) as typeof req.params;
     }
     next();
   } catch (err) {

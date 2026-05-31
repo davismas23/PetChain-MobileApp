@@ -2,7 +2,6 @@
 import express from 'express';
 
 import { authenticateJWT, authorizeRoles, type AuthenticatedRequest } from '../../middleware/auth';
-import { logAuditTrail } from '../../middleware/auditLogger';
 import { UserRole } from '../../models/UserRole';
 import { ok, sendError } from '../response';
 import { store, type StoredMedication } from '../store';
@@ -81,14 +80,6 @@ router.post('/', authorizeRoles(UserRole.ADMIN, UserRole.VET), (req, res) => {
     active: body.active !== false,
   };
   store.medications.set(id, row);
-  void logAuditTrail({
-    req,
-    entityType: 'medication',
-    entityId: id,
-    action: 'CREATE',
-    before: null,
-    after: row,
-  });
   return res.status(201).json(ok(row, 'Medication created'));
 });
 
@@ -107,31 +98,13 @@ router.put('/:id', authorizeRoles(UserRole.ADMIN, UserRole.VET), (req, res) => {
     ...(b.petId !== undefined ? { petId: String(b.petId) } : {}),
   };
   store.medications.set(row.id, next);
-  void logAuditTrail({
-    req,
-    entityType: 'medication',
-    entityId: row.id,
-    action: 'UPDATE',
-    before: row,
-    after: next,
-  });
   return res.json(ok(next, 'Medication updated'));
 });
 
 router.delete('/:id', authorizeRoles(UserRole.ADMIN, UserRole.VET), (req, res) => {
-  const existing = store.medications.get(req.params.id);
-  if (!existing) {
+  if (!store.medications.delete(req.params.id)) {
     return sendError(res, 404, 'NOT_FOUND', 'Medication not found');
   }
-  store.medications.delete(req.params.id);
-  void logAuditTrail({
-    req,
-    entityType: 'medication',
-    entityId: existing.id,
-    action: 'DELETE',
-    before: existing,
-    after: null,
-  });
   return res.json(ok(null, 'Medication deleted'));
 });
 

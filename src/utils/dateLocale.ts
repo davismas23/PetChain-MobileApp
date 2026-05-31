@@ -4,7 +4,6 @@ import i18n from '../i18n';
 const LOCALE_MAP: Record<string, string> = {
   en: 'en-US',
   es: 'es-ES',
-  ar: 'ar-SA',
 };
 
 function locale(): string {
